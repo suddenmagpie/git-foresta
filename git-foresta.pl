@@ -84,11 +84,12 @@ my $Style         = 1;
 my $Subvine_depth = 2;
 my %Color         = (
   "default"      => "\e[0m",
-  "tree"         => "\e[0;36m",
-  "hash"         => "\e[0;35m",
-  "date"         => "\e[0;34m",
-  "author"       => "\e[0;33m",
+  "tree"         => "\e[2;32m",
+  "hash"         => "\e[2;32m",
+  "date"         => "\e[0;32m",
+  "author"       => "\e[0;37m",
   "tag"          => "\e[1;35m",
+  "commit"       => "\e[2;37m",
 
   "black"        => "\e[0;30m",
   "red"          => "\e[0;31m",
@@ -99,6 +100,14 @@ my %Color         = (
   "cyan"         => "\e[0;36m",
   "white"        => "\e[0;37m",
 
+  "red_dark"     => "\e[2;31m",
+  "green_dark"   => "\e[2;32m",
+  "yellow_dark"  => "\e[2;33m",
+  "blue_dark"    => "\e[2;34m",
+  "magenta_dark" => "\e[2;35m",
+  "cyan_dark"    => "\e[2;36m",
+  "white_dark"   => "\e[2;37m",
+
   "black_bold"   => "\e[1;30m",
   "red_bold"     => "\e[1;31m",
   "green_bold"   => "\e[1;32m",
@@ -108,7 +117,7 @@ my %Color         = (
   "cyan_bold"    => "\e[1;36m",
   "white_bold"   => "\e[1;37m",
 );
-my @Branch_colors_ref     = ('blue_bold', 'yellow_bold', 'magenta_bold', 'green_bold', 'cyan_bold');
+my @Branch_colors_ref     = ('green', 'cyan', 'yellow', 'magenta', 'blue', 'red');
 my @Branch_colors_now     = ();
 my $Hash_min_width        = 8;
 my $Hash_width            = 0; # zero means auto
@@ -308,7 +317,7 @@ sub process
       $auto_refs =~ s/\x1b\[\d;\d\dm(?=tag: )/$Color{tag}/g if (grep { m{^refs/tags/}s } @{$refs->{$sha}});
     }
 
-    print $auto_refs, ' ', $msg, "\n";
+    print $auto_refs, ' ', $Color{commit}, $msg, $Color{default}, "\n";
 
     vine_merge(\@vine, $sha, \@next_sha, \@parents);
   }
