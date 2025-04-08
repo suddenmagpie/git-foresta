@@ -314,7 +314,12 @@ sub process
 
     if (exists($refs->{$sha})) {
       $auto_refs =~ s/[^\/]HEAD/$&$status/ if $Show_status && (grep { $_ eq 'HEAD' } @{$refs->{$sha}});
-      $auto_refs =~ s/\x1b\[\d;\d\dm(?=tag: )/$Color{tag}/g if (grep { m{^refs/tags/}s } @{$refs->{$sha}});
+
+      if (grep { m{^refs/tags/}s } @{$refs->{$sha}}) {
+        $auto_refs =~ s/\x1b\[(\d;)?\d{,2}m//g;
+        $auto_refs =~ s/tag:\s//g;
+        $auto_refs =~ s/\((.*)\)/$Color{yellow}($Color{tag}\1$Color{yellow})/g;
+      }
     }
 
     print $auto_refs, ' ', $Color{commit}, $msg, $Color{default}, "\n";
